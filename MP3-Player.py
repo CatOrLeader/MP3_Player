@@ -121,7 +121,7 @@ class MP3:
                                   justify=LEFT)
         self.time_playing.place(relx=0.25, rely=0.70, anchor=CENTER)
         # self.time_playing_update()
-        self.length_track = 0
+        self.length_track = ''
         self.time_all = Label(master=self.root, bg='#38383C', fg='#D8C3C3',
                               text=self.length_track, font=('Cambria Math', 12),
                               justify=LEFT)
@@ -144,7 +144,7 @@ class MP3:
         else:
             self.length_track = str(self.length_track // 60) + '.' + str(self.length_track % 60)
         self.time_all.configure(text=self.length_track)
-        self.scale_of_track.configure(to=self.length_track)
+        self.scale_of_track.configure(to=self.length, value=0)
 
     def load(self):
         # self.tracks_length = list()
@@ -311,7 +311,8 @@ class MP3:
             self.list_of_songs.clear()
             self.list_of_songs_names.clear()
             self.track_name_on_screen['text'] = ''
-            self.time_all.configure(text=0)
+            self.time_all.configure(text='')
+            self.scale_of_track.configure(value=0)
         except:
             pass
 
@@ -511,8 +512,14 @@ class MP3:
         except:
             pass
 
-    def track_playing(self):
-        
+    def track_playing(self, val):
+        try:
+            if pygame.mixer.music.get_busy():
+                pygame.mixer.music.set_pos(float(val))
+            else:
+                pygame.mixer.music.play(0, start=float(val))
+        except:
+            pass
 
     def playlist_open(self):
         """ Говноед не ленись и создай отдельный children-класс для создания окна поверх существующего
@@ -699,7 +706,14 @@ class MP3:
     # NEXT BUTTON
     def next_track(self):
         try:
-            pygame.mixer.music.set_pos(self.length)
+            if self.playing == 1:
+                pygame.mixer.music.set_pos(self.length)
+                self.playing = 2
+            elif self.playing == 2:
+                pygame.mixer.music.set_pos(self.length)
+                self.playing = 3
+            else:
+                pygame.mixer.music.set_pos(self.length)
         except:
             pass
 
@@ -859,9 +873,9 @@ class MP3:
 
 ''' Нужно доделать:
 1. Реплей плейлиста - СДЕЛАНО 
-2. Полоска момента времени в треке
+2. Полоска момента времени в треке P.S: Доделать ежесекундное передвижение вправо до конца проигрывания
 3. Фронтить
 4. Кнопка возврата из окна плейлиста
-5. Не работает удаление 1 --> 2.  '''
+5. Не работает удаление 1 --> 2 при наличии 3 треков в плейлисте  '''
 
 MP3()
