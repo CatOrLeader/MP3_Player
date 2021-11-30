@@ -120,7 +120,7 @@ class MP3:
                                   text=0, font=('Cambria Math', 12),
                                   justify=LEFT)
         self.time_playing.place(relx=0.25, rely=0.70, anchor=CENTER)
-        # self.time_playing_update()
+        self.time_playing_update()
         self.length_track = ''
         self.time_all = Label(master=self.root, bg='#38383C', fg='#D8C3C3',
                               text=self.length_track, font=('Cambria Math', 12),
@@ -134,6 +134,9 @@ class MP3:
 
         self.playing = 0
         self.length = 0
+        self.track_already_played = 0
+        self.minutes = 0
+        self.seconds = 0
 
         self.root.mainloop()
 
@@ -179,6 +182,9 @@ class MP3:
                                 self.playing = 2
                                 self.length = pygame.mixer.Sound(self.list_of_songs[1]).get_length()
                                 self.find_length_of_track()
+                                self.track_already_played = 0
+                                self.minutes = 0
+                                self.seconds = 0
                                 pygame.mixer.music.play()
                                 self.track_name_on_screen.configure(text=self.list_of_songs_names[1])
                                 pygame.mixer.music.set_endevent(0)
@@ -196,6 +202,9 @@ class MP3:
                     self.playing = 2
                     self.length = pygame.mixer.Sound(self.list_of_songs[1]).get_length()
                     self.find_length_of_track()
+                    self.track_already_played = 0
+                    self.minutes = 0
+                    self.seconds = 0
                     pygame.mixer.music.play(0)
                     self.track_name_on_screen.configure(text=self.list_of_songs_names[1])
 
@@ -217,6 +226,9 @@ class MP3:
                                 self.playing = 2
                                 self.length = pygame.mixer.Sound(self.list_of_songs[1]).get_length()
                                 self.find_length_of_track()
+                                self.track_already_played = 0
+                                self.minutes = 0
+                                self.seconds = 0
                                 self.track_name_on_screen.configure(text=self.list_of_songs_names[1])
                                 pygame.mixer.music.set_endevent(MUSIC_END_2)
                             if event.type == MUSIC_END_2:
@@ -226,6 +238,9 @@ class MP3:
                                 self.playing = 3
                                 self.length = pygame.mixer.Sound(self.list_of_songs[2]).get_length()
                                 self.find_length_of_track()
+                                self.track_already_played = 0
+                                self.minutes = 0
+                                self.seconds = 0
                                 self.track_name_on_screen.configure(text=self.list_of_songs_names[2])
                                 pygame.mixer.music.set_endevent(0)
                         self.root.after(100, check_event)
@@ -239,6 +254,9 @@ class MP3:
                     self.playing = 2
                     self.length = pygame.mixer.Sound(self.list_of_songs[1]).get_length()
                     self.find_length_of_track()
+                    self.track_already_played = 0
+                    self.minutes = 0
+                    self.seconds = 0
                     pygame.mixer.music.play(0)
                     self.track_name_on_screen.configure(text=self.list_of_songs_names[2])
             except:
@@ -262,6 +280,9 @@ class MP3:
                     self.playing = 1
                     self.length = pygame.mixer.Sound(self.list_of_songs[0]).get_length()
                     self.find_length_of_track()
+                    self.track_already_played = 0
+                    self.minutes = 0
+                    self.seconds = 0
                     self.track_name_on_screen.configure(text=self.list_of_songs_names[0])
 
                     def check_event():
@@ -278,6 +299,9 @@ class MP3:
                                     self.playing = 2
                                     self.length = pygame.mixer.Sound(self.list_of_songs[1]).get_length()
                                     self.find_length_of_track()
+                                    self.track_already_played = 0
+                                    self.minutes = 0
+                                    self.seconds = 0
                                     self.track_name_on_screen.configure(text=self.list_of_songs_names[1])
                                     pygame.mixer.music.set_endevent(MUSIC_END_2)
                             if event.type == MUSIC_END_2:
@@ -287,6 +311,9 @@ class MP3:
                                 self.playing = 3
                                 self.length = pygame.mixer.Sound(self.list_of_songs[2]).get_length()
                                 self.find_length_of_track()
+                                self.track_already_played = 0
+                                self.minutes = 0
+                                self.seconds = 0
                                 self.track_name_on_screen.configure(text=self.list_of_songs_names[2])
                                 pygame.mixer.music.set_endevent(0)
                         self.root.after(100, check_event)
@@ -312,15 +339,27 @@ class MP3:
             self.list_of_songs_names.clear()
             self.track_name_on_screen['text'] = ''
             self.time_all.configure(text='')
-            self.scale_of_track.configure(value=0)
+            self.track_already_played = 0
+            self.minutes = 0
+            self.seconds = 0
+            self.time_playing.configure(text=self.track_already_played)
+            self.scale_of_track.configure(value='')
         except:
             pass
 
     def time_playing_update(self):
-        while pygame.mixer.music.get_busy():
-            self.val += pygame.mixer.music.get_pos()
-            self.time_playing.configure(text=self.val)
-            self.root.after(100, self.time_playing_update)
+        if pygame.mixer.music.get_busy():
+            self.seconds += 1
+            if self.seconds == 60:
+                self.minutes += 1
+                self.seconds = 0
+            if self.seconds < 10:
+                self.track_already_played = str(self.minutes) + '.0' + str(self.seconds)
+            else:
+                self.track_already_played = str(self.minutes) + '.' + str(self.seconds)
+            self.time_playing.configure(text=self.track_already_played)
+            self.scale_of_track.configure(value=self.minutes * 60 + self.seconds)
+        self.root.after(1000, self.time_playing_update)
 
     def pause(self):
         pygame.mixer.music.pause()
@@ -332,8 +371,8 @@ class MP3:
 
     def replay_on(self):
         try:
-            self.val += pygame.mixer.music.get_pos()
-            pygame.mixer.music.play(-1, start=self.val / 1000)
+            self.val = float(self.minutes * 60 + self.seconds)
+            pygame.mixer.music.play(-1, start=self.val)
         except:
             pass
         else:
@@ -341,19 +380,19 @@ class MP3:
             self.replay_btn.config(image=self.replay_on_png, command=self.replay_playlist)
 
     def replay_playlist(self):
-        self.val += pygame.mixer.music.get_pos()
+        self.val = float(self.minutes * 60 + self.seconds)
         try:
             if self.playing == 1:
                 pygame.mixer.music.load(self.list_of_songs[0])
-                pygame.mixer.music.play(0, start=self.val / 1000)
+                pygame.mixer.music.play(0, start=self.val)
                 pygame.mixer.music.set_endevent(0)
             elif self.playing == 2:
                 pygame.mixer.music.load(self.list_of_songs[1])
-                pygame.mixer.music.play(0, start=self.val / 1000)
+                pygame.mixer.music.play(0, start=self.val)
                 pygame.mixer.music.set_endevent(0)
             else:
                 pygame.mixer.music.load(self.list_of_songs[2])
-                pygame.mixer.music.play(0, start=self.val / 1000)
+                pygame.mixer.music.play(0, start=self.val)
                 pygame.mixer.music.set_endevent(0)
 
             if len(self.list_of_songs) == 1:
@@ -373,6 +412,9 @@ class MP3:
                             self.playing = 2
                             self.length = pygame.mixer.Sound(self.list_of_songs[1]).get_length()
                             self.find_length_of_track()
+                            self.track_already_played = 0
+                            self.minutes = 0
+                            self.seconds = 0
                             pygame.mixer.music.set_endevent(MUSIC_END_2)
 
                         if event.type == MUSIC_END_2:
@@ -383,6 +425,9 @@ class MP3:
                             self.playing = 1
                             self.length = pygame.mixer.Sound(self.list_of_songs[0]).get_length()
                             self.find_length_of_track()
+                            self.track_already_played = 0
+                            self.minutes = 0
+                            self.seconds = 0
                             pygame.mixer.music.set_endevent(MUSIC_END_1)
                     self.root.after(100, check_event)
 
@@ -407,6 +452,9 @@ class MP3:
                             self.playing = 2
                             self.length = pygame.mixer.Sound(self.list_of_songs[1]).get_length()
                             self.find_length_of_track()
+                            self.track_already_played = 0
+                            self.minutes = 0
+                            self.seconds = 0
                             pygame.mixer.music.set_endevent(MUSIC_END_2)
 
                         if event.type == MUSIC_END_2:
@@ -417,6 +465,9 @@ class MP3:
                             self.playing = 3
                             self.length = pygame.mixer.Sound(self.list_of_songs[2]).get_length()
                             self.find_length_of_track()
+                            self.track_already_played = 0
+                            self.minutes = 0
+                            self.seconds = 0
                             pygame.mixer.music.set_endevent(MUSIC_END_3)
 
                         if event.type == MUSIC_END_3:
@@ -427,6 +478,9 @@ class MP3:
                             self.playing = 1
                             self.length = pygame.mixer.Sound(self.list_of_songs[0]).get_length()
                             self.find_length_of_track()
+                            self.track_already_played = 0
+                            self.minutes = 0
+                            self.seconds = 0
                             pygame.mixer.music.set_endevent(MUSIC_END_1)
                     self.root.after(100, check_event)
 
@@ -446,18 +500,19 @@ class MP3:
 
     def replay_off(self):
         try:
+            self.val = float(self.minutes * 60 + self.seconds)
             if self.playing == 1:
                 pygame.mixer.music.load(self.list_of_songs[0])
-                pygame.mixer.music.play(0, start=self.val / 1000)
+                pygame.mixer.music.play(0, start=self.val)
                 pygame.mixer.music.set_endevent(0)
             elif self.playing == 2:
                 if len(self.list_of_songs) == 2:
                     pygame.mixer.music.load(self.list_of_songs[1])
-                    pygame.mixer.music.play(0, start=self.val / 1000)
+                    pygame.mixer.music.play(0, start=self.val)
                     pygame.mixer.music.set_endevent(0)
                 elif len(self.list_of_songs) == 3:
                     pygame.mixer.music.load(self.list_of_songs[1])
-                    pygame.mixer.music.play(0, start=self.val / 1000)
+                    pygame.mixer.music.play(0, start=self.val)
 
                     def check_event():
                         for event in pygame.event.get():
@@ -468,6 +523,9 @@ class MP3:
                                 self.playing = 3
                                 self.length = pygame.mixer.Sound(self.list_of_songs[2]).get_length()
                                 self.find_length_of_track()
+                                self.track_already_played = 0
+                                self.minutes = 0
+                                self.seconds = 0
                                 self.track_name_on_screen.configure(text=self.list_of_songs_names[2])
                         self.root.after(100, check_event)
 
@@ -477,7 +535,7 @@ class MP3:
                     check_event()
             else:
                 pygame.mixer.music.load(self.list_of_songs[2])
-                pygame.mixer.music.play(0, start=self.val / 1000)
+                pygame.mixer.music.play(0, start=self.val)
                 pygame.mixer.music.set_endevent(0)
         except:
             pass
@@ -514,10 +572,18 @@ class MP3:
 
     def track_playing(self, val):
         try:
+            timer = int(val.split('.')[0])
             if pygame.mixer.music.get_busy():
                 pygame.mixer.music.set_pos(float(val))
+                self.scale_of_track.configure(value=float(val))
             else:
                 pygame.mixer.music.play(0, start=float(val))
+            self.minutes = timer // 60
+            self.seconds = timer % 60
+            if self.seconds < 10:
+                self.track_already_played = str(self.minutes) + '.0' + str(self.seconds)
+            else:
+                self.track_already_played = str(self.minutes) + '.' + str(self.seconds)
         except:
             pass
 
@@ -579,6 +645,7 @@ class MP3:
 
     def delete_first_track_from_playlist(self):
         try:
+            self.val = float(self.minutes * 60 + self.seconds)
             self.replay_off()
             if len(self.list_of_songs) == 1:
                 pygame.mixer.music.unload()
@@ -596,17 +663,31 @@ class MP3:
                 self.track_name_on_screen.configure(text=self.list_of_songs_names[0])
                 self.btn_first.place_forget()
                 self.btn_first_cancel.place_forget()
+                self.w, self.h = self.window.winfo_geometry().split('+')[1], self.window.winfo_geometry().split('+')[2]
+                self.window.destroy()
+                self.playlist_open()
+
                 if self.playing == 1:
                     if len(self.list_of_songs) == 1:
                         pygame.mixer.music.unload()
                         pygame.mixer.music.load(self.list_of_songs[0])
                         pygame.mixer.music.play()
+                        self.playing = 1
+                        self.length = pygame.mixer.Sound(self.list_of_songs[0]).get_length()
+                        self.find_length_of_track()
+                        self.track_already_played = 0
+                        self.minutes = 0
+                        self.seconds = 0
                     else:
+                        pygame.mixer.music.unload()
                         pygame.mixer.music.load(self.list_of_songs[0])
                         pygame.mixer.music.play()
                         self.playing = 1
                         self.length = pygame.mixer.Sound(self.list_of_songs[0]).get_length()
                         self.find_length_of_track()
+                        self.track_already_played = 0
+                        self.minutes = 0
+                        self.seconds = 0
 
                         def check_event():
                             """ Function check events in pygame.event list(?), and if the events was already done, will
@@ -619,6 +700,9 @@ class MP3:
                                     self.playing = 2
                                     self.length = pygame.mixer.Sound(self.list_of_songs[1]).get_length()
                                     self.find_length_of_track()
+                                    self.track_already_played = 0
+                                    self.minutes = 0
+                                    self.seconds = 0
                                     self.track_name_on_screen.configure(text=self.list_of_songs_names[1])
                                     pygame.mixer.music.set_endevent(0)
                             self.root.after(100, check_event)
@@ -631,17 +715,22 @@ class MP3:
 
             if len(self.list_of_songs) == 0:
                 self.stop()
+
         except:
             pass
 
     def delete_second_from_playlist(self):
         try:
+            self.val = float(self.minutes * 60 + self.seconds)
             self.replay_off()
             if len(self.list_of_songs) == 1:
                 del self.list_of_songs[0]
                 del self.list_of_songs_names[0]
                 self.btn_second.place_forget()
                 self.btn_second_cancel.place_forget()
+                self.w, self.h = self.window.winfo_geometry().split('+')[1], self.window.winfo_geometry().split('+')[2]
+                self.window.destroy()
+                self.playlist_open()
                 self.track_name_on_screen.configure(text='')
                 self.window.update_idletasks()
                 self.stop()
@@ -650,12 +739,20 @@ class MP3:
                 del self.list_of_songs_names[1]
                 self.btn_second.place_forget()
                 self.btn_second_cancel.place_forget()
-                self.window.update_idletasks()
+                self.w, self.h = self.window.winfo_geometry().split('+')[1], self.window.winfo_geometry().split('+')[2]
+                self.window.destroy()
+                self.playlist_open()
                 if self.playing == 2:
                     pygame.mixer.music.unload()
+                    print('zdes')
                     pygame.mixer.music.load(self.list_of_songs[1])
                     pygame.mixer.music.play()
                     self.track_name_on_screen.configure(text=self.list_of_songs_names[1])
+                    self.length = pygame.mixer.Sound(self.list_of_songs[1]).get_length()
+                    self.find_length_of_track()
+                    self.track_already_played = 0
+                    self.minutes = 0
+                    self.seconds = 0
                 if len(self.list_of_songs) == 0:
                     self.stop()
         except:
@@ -663,12 +760,16 @@ class MP3:
 
     def delete_third_from_playlist(self):
         try:
+            self.val = float(self.minutes * 60 + self.seconds)
             self.replay_off()
             if len(self.list_of_songs) == 1:
                 del self.list_of_songs[0]
                 del self.list_of_songs_names[0]
                 self.btn_third.place_forget()
                 self.btn_third_cancel.place_forget()
+                self.w, self.h = self.window.winfo_geometry().split('+')[1], self.window.winfo_geometry().split('+')[2]
+                self.window.destroy()
+                self.playlist_open()
                 self.track_name_on_screen.configure(text='')
                 self.stop()
             elif len(self.list_of_songs) > 1:
@@ -676,7 +777,9 @@ class MP3:
                 del self.list_of_songs_names[2]
                 self.btn_third.place_forget()
                 self.btn_third_cancel.place_forget()
-                self.window.update_idletasks()
+                self.w, self.h = self.window.winfo_geometry().split('+')[1], self.window.winfo_geometry().split('+')[2]
+                self.window.destroy()
+                self.playlist_open()
                 if self.playing == 3:
                     pygame.mixer.music.unload()
                 if len(self.list_of_songs) == 0:
@@ -692,14 +795,22 @@ class MP3:
                 pass
             elif self.playing == 2:
                 self.play_first()
+                self.playing = 1
             else:
                 self.play_second()
+                self.playing = 2
+            self.track_already_played = 0
+            self.minutes = 0
+            self.seconds = 0
         except:
             pass
 
     def reach_for_begining(self):
         try:
             pygame.mixer.music.set_pos(0)
+            self.track_already_played = 0
+            self.minutes = 0
+            self.seconds = 0
         except:
             pass
 
@@ -714,6 +825,9 @@ class MP3:
                 self.playing = 3
             else:
                 pygame.mixer.music.set_pos(self.length)
+            self.track_already_played = 0
+            self.minutes = 0
+            self.seconds = 0
         except:
             pass
 
@@ -734,6 +848,9 @@ class MP3:
                 self.playing = 1
                 self.length = pygame.mixer.Sound(self.list_of_songs[0]).get_length()
                 self.find_length_of_track()
+                self.track_already_played = 0
+                self.minutes = 0
+                self.seconds = 0
 
                 def check_event():
                     """ Function check events in pygame.event list(?), and if the events was already done, will
@@ -746,6 +863,9 @@ class MP3:
                             self.playing = 2
                             self.length = pygame.mixer.Sound(self.list_of_songs[1]).get_length()
                             self.find_length_of_track()
+                            self.track_already_played = 0
+                            self.minutes = 0
+                            self.seconds = 0
                             self.track_name_on_screen.configure(text=self.list_of_songs_names[1])
                             pygame.mixer.music.set_endevent(0)
                     self.root.after(100, check_event)
@@ -763,6 +883,9 @@ class MP3:
                 self.playing = 1
                 self.length = pygame.mixer.Sound(self.list_of_songs[0]).get_length()
                 self.find_length_of_track()
+                self.track_already_played = 0
+                self.minutes = 0
+                self.seconds = 0
                 self.track_name_on_screen.configure(text=self.list_of_songs_names[0])
                 self.window.update_idletasks()
 
@@ -777,6 +900,9 @@ class MP3:
                             self.playing = 2
                             self.length = pygame.mixer.Sound(self.list_of_songs[1]).get_length()
                             self.find_length_of_track()
+                            self.track_already_played = 0
+                            self.minutes = 0
+                            self.seconds = 0
                             self.track_name_on_screen.configure(text=self.list_of_songs_names[1])
                             pygame.mixer.music.set_endevent(MUSIC_END_2)
                         if event.type == MUSIC_END_2:
@@ -786,6 +912,9 @@ class MP3:
                             self.playing = 3
                             self.length = pygame.mixer.Sound(self.list_of_songs[2]).get_length()
                             self.find_length_of_track()
+                            self.track_already_played = 0
+                            self.minutes = 0
+                            self.seconds = 0
                             self.track_name_on_screen.configure(text=self.list_of_songs_names[2])
                             pygame.mixer.music.set_endevent(0)
                     self.root.after(100, check_event)
@@ -810,6 +939,9 @@ class MP3:
                 self.playing = 2
                 self.length = pygame.mixer.Sound(self.list_of_songs[1]).get_length()
                 self.find_length_of_track()
+                self.track_already_played = 0
+                self.minutes = 0
+                self.seconds = 0
                 self.track_name_on_screen.configure(text=self.list_of_songs_names[1])
                 self.window.update_idletasks()
             if len(self.list_of_songs) == 3:
@@ -819,6 +951,9 @@ class MP3:
                 self.playing = 2
                 self.length = pygame.mixer.Sound(self.list_of_songs[1]).get_length()
                 self.find_length_of_track()
+                self.track_already_played = 0
+                self.minutes = 0
+                self.seconds = 0
                 self.track_name_on_screen.configure(text=self.list_of_songs_names[1])
 
                 def check_event():
@@ -830,6 +965,9 @@ class MP3:
                             self.playing = 3
                             self.length = pygame.mixer.Sound(self.list_of_songs[2]).get_length()
                             self.find_length_of_track()
+                            self.track_already_played = 0
+                            self.minutes = 0
+                            self.seconds = 0
                             self.track_name_on_screen.configure(text=self.list_of_songs_names[2])
                             pygame.mixer.music.set_endevent(0)
                     self.root.after(100, check_event)
@@ -852,6 +990,9 @@ class MP3:
             self.playing = 3
             self.length = pygame.mixer.Sound(self.list_of_songs[2]).get_length()
             self.find_length_of_track()
+            self.track_already_played = 0
+            self.minutes = 0
+            self.seconds = 0
             self.track_name_on_screen.configure(text=self.list_of_songs_names[2])
 
             def check_event():
@@ -873,9 +1014,10 @@ class MP3:
 
 ''' Нужно доделать:
 1. Реплей плейлиста - СДЕЛАНО 
-2. Полоска момента времени в треке P.S: Доделать ежесекундное передвижение вправо до конца проигрывания
+2. Полоска момента времени в треке P.S: Доделать ежесекундное передвижение вправо до конца проигрывания 
+P.S: CONFIRMEDSUKA
 3. Фронтить
 4. Кнопка возврата из окна плейлиста
-5. Не работает удаление 1 --> 2 при наличии 3 треков в плейлисте  '''
+5. Не работает удаление 1 --> 2 при наличии 3 треков в плейлисте P.S: EDIK POCHINIL  '''
 
 MP3()
