@@ -18,21 +18,21 @@ class MP3:
         self.w = (self.root.winfo_screenwidth() // 2) - 200
         self.h = (self.root.winfo_screenheight() // 2) - 200
         self.root.geometry('450x300+{}+{}'.format(self.w, self.h))
-        self.root.configure(bg='#38383C')
+        self.root.configure(bg='#e6e6e6')
         self.root.resizable(False, False)
 
         # Style for ttk creating
         self.style = ttk.Style(self.root)
         self.style.theme_names()
         self.style.theme_use('alt')
-        self.style.configure('TScale', background='#38383C', fg='#38383C', troughcolor='#5D5D65')
+        self.style.configure('TScale', background='#e6e6e6', fg='#e6e6e6', troughcolor='#ffdb4d')
 
         # BUTTONS AND FRAMES CREATING
-        self.btns_frame = Frame(self.root, height=100, bg='#38383C', borderwidth=1)
+        self.btns_frame = Frame(self.root, height=100, bg='#e6e6e6', borderwidth=1)
         self.btns_frame.pack(side=BOTTOM, fill=BOTH)
 
         self.prev_png = PhotoImage(file='prev.png').subsample(5)
-        self.prev_btn = Button(master=self.btns_frame, image=self.prev_png, bg='#38383C', borderwidth=0,
+        self.prev_btn = Button(master=self.btns_frame, image=self.prev_png, bg='#e6e6e6', borderwidth=0,
                                activebackground='#5D5D65',
                                command=self.reach_for_begining)
         self.prev_btn.bind('<Double-Button-1>', self.prev)
@@ -40,45 +40,45 @@ class MP3:
 
         self.start_png = PhotoImage(file='start.png').subsample(4)
         self.pause_png = PhotoImage(file='pause.png').subsample(4)
-        self.start_or_pause_btn = Button(master=self.btns_frame, image=self.start_png, bg='#38383C', borderwidth=0,
+        self.start_or_pause_btn = Button(master=self.btns_frame, image=self.start_png, bg='#e6e6e6', borderwidth=0,
                                          activebackground='#5D5D65',
                                          command=self.pause)
-        self.start_or_pause_btn.place(relx=0.5, rely=0.5, anchor=CENTER)
+        self.start_or_pause_btn.place(relx=0.5, rely=0.6, anchor=CENTER)
 
-        self.stop_png = PhotoImage(file='stop.png').subsample(11)
-        self.stop_btn = Button(master=self.btns_frame, image=self.stop_png, bg='#38383C', borderwidth=0,
+        self.stop_png = PhotoImage(file='stop.png').subsample(5)
+        self.stop_btn = Button(master=self.btns_frame, image=self.stop_png, bg='#e6e6e6', borderwidth=0,
                                activebackground='#5D5D65',
                                command=self.stop)
         self.stop_btn.place(relx=0.1, rely=0.5, anchor=CENTER)
 
         self.next_png = PhotoImage(file='next.png').subsample(5)
-        self.next_btn = Button(master=self.btns_frame, image=self.next_png, bg='#38383C', borderwidth=0,
+        self.next_btn = Button(master=self.btns_frame, image=self.next_png, bg='#e6e6e6', borderwidth=0,
                                activebackground='#5D5D65',
                                command=self.next_track)
         self.next_btn.place(relx=0.65, rely=0.5, anchor=CENTER)
 
-        self.replay_off_png = PhotoImage(file='replay_off.png').subsample(17)
-        self.replay_on_png = PhotoImage(file='replay_on.png').subsample(17)
-        self.replay_playlist_png = PhotoImage(file='replay_playlist.png').subsample(17)
-        self.replay_btn = Button(master=self.btns_frame, image=self.replay_off_png, bg='#38383C', borderwidth=0,
+        self.replay_off_png = PhotoImage(file='replay_off.png').subsample(5)
+        self.replay_on_png = PhotoImage(file='replay_on.png').subsample(5)
+        self.replay_playlist_png = PhotoImage(file='replay_playlist.png').subsample(5)
+        self.replay_btn = Button(master=self.btns_frame, image=self.replay_off_png, bg='#e6e6e6', borderwidth=0,
                                  activebackground='#5D5D65',
                                  command=self.replay_on)
         self.replay_btn.place(relx=0.9, rely=0.5, anchor=CENTER)
 
         # Load_button and track_name out the frame
         self.load_png = PhotoImage(file='load.png').subsample(10)
-        self.load_btn = Button(master=self.root, image=self.load_png, bg='#38383C', borderwidth=0,
+        self.load_btn = Button(master=self.root, image=self.load_png, bg='#e6e6e6', borderwidth=0,
                                activebackground='#5D5D65',
                                command=self.load)
         self.load_btn.place(relx=0.1, rely=0.175, anchor=CENTER)
 
-        self.track_name_on_screen = Label(master=self.root, bg='#38383C', fg='#D8C3C3',
+        self.track_name_on_screen = Label(master=self.root, bg='#e6e6e6', fg='#535055',
                                           text='', font=('Cambria Math', 12),
                                           justify=LEFT, width=30)
         self.track_name_on_screen.place(relx=0.5, rely=0.55, anchor=CENTER)
 
         self.playlist_png = PhotoImage(file='playlist.png').subsample(8)
-        self.playlist_btn = Button(master=self.root, image=self.playlist_png, bg='#38383C', borderwidth=0,
+        self.playlist_btn = Button(master=self.root, image=self.playlist_png, bg='#e6e6e6', borderwidth=0,
                                    activebackground='#5D5D65',
                                    command=self.playlist_open)
         self.playlist_btn.place(relx=0.9, rely=0.2, anchor=CENTER)
@@ -91,17 +91,17 @@ class MP3:
         self.scale_volume_png = PhotoImage(file='volume.png').subsample(18)
         self.scale_volume_100_png = PhotoImage(file='volume_100.png').subsample(18)
 
-        self.button_mute = Button(master=self.root, image=self.scale_volume_mute_png, bg='#38383C', borderwidth=0,
+        self.button_mute = Button(master=self.root, image=self.scale_volume_mute_png, bg='#e6e6e6', borderwidth=0,
                                   activebackground='#5D5D65',
                                   command=self.volume_mute)
         self.button_mute.place(relx=0.045, rely=0.65, anchor=CENTER)
 
-        self.button_average = Button(master=self.root, image=self.scale_volume_png, bg='#38383C', borderwidth=0,
+        self.button_average = Button(master=self.root, image=self.scale_volume_png, bg='#e6e6e6', borderwidth=0,
                                      activebackground='#5D5D65',
                                      command=self.volume_average)
         self.button_average.place(relx=0.05, rely=0.5, anchor=CENTER)
 
-        self.button_100 = Button(master=self.root, image=self.scale_volume_100_png, bg='#38383C', borderwidth=0,
+        self.button_100 = Button(master=self.root, image=self.scale_volume_100_png, bg='#e6e6e6', borderwidth=0,
                                  activebackground='#5D5D65',
                                  command=self.volume_100)
         self.button_100.place(relx=0.05, rely=0.35, anchor=CENTER)
@@ -114,18 +114,17 @@ class MP3:
         self.scale_of_track = ttk.Scale(self.root, from_=0, to=0, orient='horizontal', length=200,
                                         style='TScale',
                                         command=self.track_playing)
-        self.scale_of_track.place(relx=0.5, rely=0.6, anchor=CENTER)
+        self.scale_of_track.place(relx=0.5, rely=0.68, anchor=CENTER)
 
-        self.time_playing = Label(master=self.root, bg='#38383C', fg='#D8C3C3',
-                                  text=0, font=('Cambria Math', 12),
+        self.time_playing = Label(master=self.root, bg='#e6e6e6', fg='#535055',
+                                  text=0, font=('Cambria Math', 10),
                                   justify=LEFT)
-        self.time_playing.place(relx=0.25, rely=0.70, anchor=CENTER)
-        self.time_playing_update()
+        self.time_playing.place(relx=0.25, rely=0.6, anchor=CENTER)
         self.length_track = ''
-        self.time_all = Label(master=self.root, bg='#38383C', fg='#D8C3C3',
-                              text=self.length_track, font=('Cambria Math', 12),
+        self.time_all = Label(master=self.root, bg='#e6e6e6', fg='#535055',
+                              text=self.length_track, font=('Cambria Math', 10),
                               justify=LEFT)
-        self.time_all.place(relx=0.75, rely=0.70, anchor=CENTER)
+        self.time_all.place(relx=0.75, rely=0.6, anchor=CENTER)
         self.time_all.configure(text=self.length_track)
 
         # Temporaries
@@ -138,7 +137,10 @@ class MP3:
         self.minutes = 0
         self.seconds = 0
 
+        self.time_playing_update()
         self.root.mainloop()
+
+    # WORK WITH TRACK PLAYING AND LENGTH
 
     def find_length_of_track(self):
         self.length_track = int(self.length)
@@ -149,13 +151,55 @@ class MP3:
         self.time_all.configure(text=self.length_track)
         self.scale_of_track.configure(to=self.length, value=0)
 
+    def time_playing_update(self):
+        if pygame.mixer.music.get_busy():
+            self.seconds += 1
+            if self.seconds == 60:
+                self.minutes += 1
+                self.seconds = 0
+            if self.seconds < 10:
+                self.track_already_played = str(self.minutes) + '.0' + str(self.seconds)
+            else:
+                self.track_already_played = str(self.minutes) + '.' + str(self.seconds)
+            self.time_playing.configure(text=self.track_already_played)
+            self.scale_of_track.configure(value=self.minutes * 60 + self.seconds)
+        elif (self.minutes * 60 + self.seconds) < int(self.length):
+            self.seconds += 1
+            if self.seconds == 60:
+                self.minutes += 1
+                self.seconds = 0
+            if self.seconds < 10:
+                self.track_already_played = str(self.minutes) + '.0' + str(self.seconds)
+            else:
+                self.track_already_played = str(self.minutes) + '.' + str(self.seconds)
+            self.time_playing.configure(text=self.track_already_played)
+            self.scale_of_track.configure(value=self.minutes * 60 + self.seconds)
+        elif (self.minutes * 60 + self.seconds) > int(self.length):
+            self.time_playing.configure(text=self.length_track)
+        self.root.after(1000, self.time_playing_update)
+
+    def track_playing(self, val):
+        try:
+            timer = int(val.split('.')[0])
+            if pygame.mixer.music.get_busy():
+                pygame.mixer.music.set_pos(float(val))
+                self.scale_of_track.configure(value=float(val))
+            else:
+                pygame.mixer.music.play(0, start=float(val))
+            self.minutes = timer // 60
+            self.seconds = timer % 60
+            if self.seconds < 10:
+                self.track_already_played = str(self.minutes) + '.0' + str(self.seconds)
+            else:
+                self.track_already_played = str(self.minutes) + '.' + str(self.seconds)
+        except:
+            pass
+
+    # BEGIN WORK WITH LOADING TRACKS
+
     def load(self):
-        # self.tracks_length = list()
         track_name = askopenfilename()
         self.list_of_songs.append(track_name)
-        # self.tracks_length = list()
-        # self.tracks_length.append(pygame.mixer.Sound(track_name).get_length())
-        # print(self.tracks_length)
         self.list_of_songs_names.append(((track_name.split("/")[-1]).split('.'))[0])
         if len(self.list_of_songs_names) == 1:
             try:
@@ -330,6 +374,8 @@ class MP3:
 
         self.start_or_pause_btn.config(image=self.pause_png, command=self.pause)
 
+    # MAIN BUTTONS
+
     def stop(self):
         try:
             self.replay_off()
@@ -340,26 +386,13 @@ class MP3:
             self.track_name_on_screen['text'] = ''
             self.time_all.configure(text='')
             self.track_already_played = 0
+            self.length = 0
             self.minutes = 0
             self.seconds = 0
             self.time_playing.configure(text=self.track_already_played)
-            self.scale_of_track.configure(value='')
+            self.scale_of_track.configure(value=0)
         except:
             pass
-
-    def time_playing_update(self):
-        if pygame.mixer.music.get_busy():
-            self.seconds += 1
-            if self.seconds == 60:
-                self.minutes += 1
-                self.seconds = 0
-            if self.seconds < 10:
-                self.track_already_played = str(self.minutes) + '.0' + str(self.seconds)
-            else:
-                self.track_already_played = str(self.minutes) + '.' + str(self.seconds)
-            self.time_playing.configure(text=self.track_already_played)
-            self.scale_of_track.configure(value=self.minutes * 60 + self.seconds)
-        self.root.after(1000, self.time_playing_update)
 
     def pause(self):
         pygame.mixer.music.pause()
@@ -369,17 +402,75 @@ class MP3:
         pygame.mixer.music.unpause()
         self.start_or_pause_btn.config(image=self.pause_png, command=self.pause)
 
-    def replay_on(self):
+    # REPLAY_BUTTON
+
+    def replay_off(self):
         try:
             self.val = float(self.minutes * 60 + self.seconds)
-            pygame.mixer.music.play(-1, start=self.val)
+            if self.playing == 1:
+                pygame.mixer.music.load(self.list_of_songs[0])
+                pygame.mixer.music.play(0, start=self.val)
+                pygame.mixer.music.set_endevent(0)
+            elif self.playing == 2:
+                if len(self.list_of_songs) == 2:
+                    pygame.mixer.music.load(self.list_of_songs[1])
+                    pygame.mixer.music.play(0, start=self.val)
+                    pygame.mixer.music.set_endevent(0)
+                elif len(self.list_of_songs) == 3:
+                    pygame.mixer.music.load(self.list_of_songs[1])
+                    pygame.mixer.music.play(0, start=self.val)
+
+                    def check_event():
+                        for event in pygame.event.get():
+                            if event.type == MUSIC_END:
+                                pygame.mixer.music.unload()
+                                pygame.mixer.music.load(self.list_of_songs[2])
+                                pygame.mixer.music.play()
+                                self.playing = 3
+                                self.length = pygame.mixer.Sound(self.list_of_songs[2]).get_length()
+                                self.find_length_of_track()
+                                self.track_already_played = 0
+                                self.minutes = 0
+                                self.seconds = 0
+                                self.track_name_on_screen.configure(text=self.list_of_songs_names[2])
+                        self.root.after(100, check_event)
+
+                    MUSIC_END = pygame.USEREVENT + 1
+                    pygame.mixer.music.set_endevent(MUSIC_END)
+
+                    check_event()
+            else:
+                pygame.mixer.music.load(self.list_of_songs[2])
+                pygame.mixer.music.play(0, start=self.val)
+                pygame.mixer.music.set_endevent(0)
+        except:
+            pass
+        else:
+            self.start_or_pause_btn.config(image=self.pause_png, command=self.pause)
+            self.replay_btn.config(image=self.replay_off_png, command=self.replay_on)
+
+    def replay_on(self):                                               # ДОБАВИТЬ ОБНУЛЕНИЕ ТАЙМЕРА НА СКЕЙЛЕ
+        try:
+            self.val = float(self.minutes * 60 + self.seconds)
+            if self.playing == 1:
+                pygame.mixer.music.unload()
+                pygame.mixer.music.load(self.list_of_songs[0])
+                pygame.mixer.music.play(-1, self.val)
+            elif self.playing == 2:
+                pygame.mixer.music.unload()
+                pygame.mixer.music.load(self.list_of_songs[1])
+                pygame.mixer.music.play(-1, self.val)
+            elif self.playing == 3:
+                pygame.mixer.music.unload()
+                pygame.mixer.music.load(self.list_of_songs[2])
+                pygame.mixer.music.play(-1, self.val)
         except:
             pass
         else:
             self.start_or_pause_btn.config(image=self.pause_png, command=self.pause)
             self.replay_btn.config(image=self.replay_on_png, command=self.replay_playlist)
 
-    def replay_playlist(self):
+    def replay_playlist(self):                                     # ДОБАВИТЬ ОБНУЛЕНИЕ ТАЙМЕРА НА СКЕЙЛЕ
         self.val = float(self.minutes * 60 + self.seconds)
         try:
             if self.playing == 1:
@@ -498,50 +589,51 @@ class MP3:
         self.start_or_pause_btn.config(image=self.pause_png, command=self.pause)
         self.replay_btn.config(image=self.replay_playlist_png, command=self.replay_off)
 
-    def replay_off(self):
+    def reach_for_begining(self):
         try:
-            self.val = float(self.minutes * 60 + self.seconds)
-            if self.playing == 1:
-                pygame.mixer.music.load(self.list_of_songs[0])
-                pygame.mixer.music.play(0, start=self.val)
-                pygame.mixer.music.set_endevent(0)
-            elif self.playing == 2:
-                if len(self.list_of_songs) == 2:
-                    pygame.mixer.music.load(self.list_of_songs[1])
-                    pygame.mixer.music.play(0, start=self.val)
-                    pygame.mixer.music.set_endevent(0)
-                elif len(self.list_of_songs) == 3:
-                    pygame.mixer.music.load(self.list_of_songs[1])
-                    pygame.mixer.music.play(0, start=self.val)
-
-                    def check_event():
-                        for event in pygame.event.get():
-                            if event.type == MUSIC_END:
-                                pygame.mixer.music.unload()
-                                pygame.mixer.music.load(self.list_of_songs[2])
-                                pygame.mixer.music.play()
-                                self.playing = 3
-                                self.length = pygame.mixer.Sound(self.list_of_songs[2]).get_length()
-                                self.find_length_of_track()
-                                self.track_already_played = 0
-                                self.minutes = 0
-                                self.seconds = 0
-                                self.track_name_on_screen.configure(text=self.list_of_songs_names[2])
-                        self.root.after(100, check_event)
-
-                    MUSIC_END = pygame.USEREVENT + 1
-                    pygame.mixer.music.set_endevent(MUSIC_END)
-
-                    check_event()
-            else:
-                pygame.mixer.music.load(self.list_of_songs[2])
-                pygame.mixer.music.play(0, start=self.val)
-                pygame.mixer.music.set_endevent(0)
+            pygame.mixer.music.set_pos(0)
+            self.track_already_played = 0
+            self.minutes = 0
+            self.seconds = 0
         except:
             pass
-        else:
-            self.start_or_pause_btn.config(image=self.pause_png, command=self.pause)
-            self.replay_btn.config(image=self.replay_off_png, command=self.replay_on)
+
+    # PREVIOUS BUTTON
+    def prev(self, event):
+        try:
+            if self.playing <= 1:
+                pass
+            elif self.playing == 2:
+                self.play_first()
+                self.playing = 1
+            else:
+                self.play_second()
+                self.playing = 2
+            self.track_already_played = 0
+            self.minutes = 0
+            self.seconds = 0
+        except:
+            pass
+
+    # NEXT BUTTON
+
+    def next_track(self):
+        try:
+            if self.playing == 1:
+                pygame.mixer.music.set_pos(self.length)
+                self.playing = 2
+            elif self.playing == 2:
+                pygame.mixer.music.set_pos(self.length)
+                self.playing = 3
+            else:
+                pygame.mixer.music.set_pos(self.length)
+            self.track_already_played = 0
+            self.minutes = 0
+            self.seconds = 0
+        except:
+            pass
+
+    # VOLUME_SCALE
 
     def scale_volume_height(self, val):
         try:
@@ -570,23 +662,7 @@ class MP3:
         except:
             pass
 
-    def track_playing(self, val):
-        try:
-            timer = int(val.split('.')[0])
-            if pygame.mixer.music.get_busy():
-                pygame.mixer.music.set_pos(float(val))
-                self.scale_of_track.configure(value=float(val))
-            else:
-                pygame.mixer.music.play(0, start=float(val))
-            self.minutes = timer // 60
-            self.seconds = timer % 60
-            if self.seconds < 10:
-                self.track_already_played = str(self.minutes) + '.0' + str(self.seconds)
-            else:
-                self.track_already_played = str(self.minutes) + '.' + str(self.seconds)
-        except:
-            pass
-
+    # OPEN PLAYLIST WINDOW
     def playlist_open(self):
         """ Говноед не ленись и создай отдельный children-класс для создания окна поверх существующего
         edit: не работает ниче уже написано говняно"""
@@ -595,7 +671,7 @@ class MP3:
         self.window = Toplevel()
         self.window.title('Playlist')
         self.window.iconphoto(False, PhotoImage(file='icon.png'))
-        self.window.configure(bg='#38383C')
+        self.window.configure(bg='#e6e6e6')
         self.window.geometry('450x150+{}+{}'.format(self.w, self.h))
         self.window.resizable(False, False)
         self.window.update()
@@ -606,43 +682,44 @@ class MP3:
 
             self.delete_png = PhotoImage(file='cancel.png').subsample(18)
             # 1
-            self.btn_first = Button(master=self.window, bg='#38383C', borderwidth=1,
+            self.btn_first = Button(master=self.window, bg='#e6e6e6', borderwidth=1,
                                     text=self.list_of_songs_names[0], font=('Algerian', 14), justify=CENTER,
                                     activebackground='#5D5D65',
                                     command=self.play_first)
             self.btn_first.place(relx=0.5, rely=0.1, anchor=CENTER)
 
-            self.btn_first_cancel = Button(master=self.window, bg='#38383C', borderwidth=0, image=self.delete_png,
+            self.btn_first_cancel = Button(master=self.window, bg='#e6e6e6', borderwidth=0, image=self.delete_png,
                                            activebackground='#5D5D65',
                                            command=self.delete_first_track_from_playlist)
             self.btn_first_cancel.place(relx=0.9, rely=0.1, anchor=CENTER)
 
             # 2
-            self.btn_second = Button(master=self.window, bg='#38383C', borderwidth=1,
+            self.btn_second = Button(master=self.window, bg='#e6e6e6', borderwidth=1,
                                      text=self.list_of_songs_names[1], font=('Algerian', 14), justify=CENTER,
                                      activebackground='#5D5D65',
                                      command=self.play_second)
             self.btn_second.place(relx=0.5, rely=0.5, anchor=CENTER)
 
-            self.btn_second_cancel = Button(master=self.window, bg='#38383C', borderwidth=0, image=self.delete_png,
+            self.btn_second_cancel = Button(master=self.window, bg='#e6e6e6', borderwidth=0, image=self.delete_png,
                                             activebackground='#5D5D65',
                                             command=self.delete_second_from_playlist)
             self.btn_second_cancel.place(relx=0.9, rely=0.5, anchor=CENTER)
 
             # 3
-            self.btn_third = Button(master=self.window, bg='#38383C', borderwidth=1,
+            self.btn_third = Button(master=self.window, bg='#e6e6e6', borderwidth=1,
                                     text=self.list_of_songs_names[2], font=('Algerian', 14), justify=CENTER,
                                     activebackground='#5D5D65',
                                     command=self.play_third)
             self.btn_third.place(relx=0.5, rely=0.9, anchor=CENTER)
 
-            self.btn_third_cancel = Button(master=self.window, bg='#38383C', borderwidth=0, image=self.delete_png,
+            self.btn_third_cancel = Button(master=self.window, bg='#e6e6e6', borderwidth=0, image=self.delete_png,
                                            activebackground='#5D5D65',
                                            command=self.delete_third_from_playlist)
             self.btn_third_cancel.place(relx=0.9, rely=0.9, anchor=CENTER)
         except:
             pass
 
+    # DELETE TRACKS FROM PLAYLIST WINDOW
     def delete_first_track_from_playlist(self):
         try:
             self.val = float(self.minutes * 60 + self.seconds)
@@ -744,7 +821,6 @@ class MP3:
                 self.playlist_open()
                 if self.playing == 2:
                     pygame.mixer.music.unload()
-                    print('zdes')
                     pygame.mixer.music.load(self.list_of_songs[1])
                     pygame.mixer.music.play()
                     self.track_name_on_screen.configure(text=self.list_of_songs_names[1])
@@ -788,50 +864,7 @@ class MP3:
         except:
             pass
 
-    # PREVIOUS BUTTON
-    def prev(self, event):
-        try:
-            if self.playing <= 1:
-                pass
-            elif self.playing == 2:
-                self.play_first()
-                self.playing = 1
-            else:
-                self.play_second()
-                self.playing = 2
-            self.track_already_played = 0
-            self.minutes = 0
-            self.seconds = 0
-        except:
-            pass
-
-    def reach_for_begining(self):
-        try:
-            pygame.mixer.music.set_pos(0)
-            self.track_already_played = 0
-            self.minutes = 0
-            self.seconds = 0
-        except:
-            pass
-
-    # NEXT BUTTON
-    def next_track(self):
-        try:
-            if self.playing == 1:
-                pygame.mixer.music.set_pos(self.length)
-                self.playing = 2
-            elif self.playing == 2:
-                pygame.mixer.music.set_pos(self.length)
-                self.playing = 3
-            else:
-                pygame.mixer.music.set_pos(self.length)
-            self.track_already_played = 0
-            self.minutes = 0
-            self.seconds = 0
-        except:
-            pass
-
-    # PLAYING TRACK FROM PLAYLIST WINDOW
+    # PLAYING TRACKS FROM PLAYLIST WINDOW
     def play_first(self):
         try:
             if len(self.list_of_songs) == 1:

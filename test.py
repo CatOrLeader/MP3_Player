@@ -1,44 +1,39 @@
 import tkinter as tk
+import tkinter as tk
 from tkinter import ttk
+from ttkwidgets import TickScale
 
+def set_img_color(img, color):
+    """Change color of PhotoImage img."""
+    pixel_line = "{" + " ".join(color for i in range(img.width())) + "}"
+    pixels = " ".join(pixel_line for i in range(img.height()))
+    img.put(pixels)
 
-class App(tk.Tk):
-    def __init__(self):
-        super().__init__()
+root = tk.Tk()
+# create images used for the theme
+slider_width = 30
+slider_height = 15
+# normal slider
+img_slider = tk.PhotoImage('img_slider', width=slider_width, height=slider_height, master=root)
+set_img_color(img_slider, "red")
+# active slider
+img_slider_active = tk.PhotoImage('img_slider_active', width=slider_width, height=slider_height, master=root)
+set_img_color(img_slider_active, '#1065BF')
 
-        # root window
-        self.title('Theme Demo')
-        self.geometry('400x300')
-        self.style = ttk.Style(self)
-
-        # label
-        label = ttk.Label(self, text='Name:')
-        label.grid(column=0, row=0, padx=10, pady=10,  sticky='w')
-        # entry
-        textbox = ttk.Scale(self)
-        textbox.grid(column=1, row=0, padx=10, pady=10,  sticky='w')
-        # button
-        btn = ttk.Button(self, text='Show')
-        btn.grid(column=2, row=0, padx=10, pady=10,  sticky='w')
-
-        # radio button
-        self.selected_theme = tk.StringVar()
-        theme_frame = ttk.LabelFrame(self, text='Themes')
-        theme_frame.grid(padx=10, pady=10, ipadx=20, ipady=20, sticky='w')
-
-        for theme_name in self.style.theme_names():
-            rb = ttk.Radiobutton(
-                theme_frame,
-                text=theme_name,
-                value=theme_name,
-                variable=self.selected_theme,
-                command=self.change_theme)
-            rb.pack(expand=True, fill='both')
-
-    def change_theme(self):
-        self.style.theme_use(self.selected_theme.get())
-
-
-if __name__ == "__main__":
-    app = App()
-    app.mainloop()
+style = ttk.Style(root)
+style.theme_use('clam')
+# create scale element
+style.element_create('custom.Horizontal.Scale.slider', 'image', img_slider,
+                     ('active', img_slider_active))
+# create custom layout
+style.layout('custom.Horizontal.TScale',
+             [('Horizontal.Scale.trough',
+               {'sticky': 'nswe',
+                'children': [('custom.Horizontal.Scale.slider',
+                              {'side': 'left', 'sticky': ''})]})])
+style.configure('custom.Horizontal.TScale', background='black', foreground='grey',
+                troughcolor='#73B5FA')
+scale = TickScale(root, from_=0, to=100, tickinterval=100, orient="horizontal",
+                  style='custom.Horizontal.TScale')
+scale.pack(fill='x')
+root.mainloop()
